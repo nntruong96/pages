@@ -42,14 +42,14 @@
     ></script>
     <script type="text/javascript">
       $(document).ready(function () {
-        // Lấy các tham số từ URL
+
         const params = new URLSearchParams(window.location.search);
         const linkBase = params.get('link');
-        const start = parseInt(params.get('start')) || 18; // Mặc định là 18 nếu không có start
-        const end = parseInt(params.get('end')) || 24; // Mặc định là 24 nếu không có end
+        const start = parseInt(params.get('start')) || 18; 
+        const end = parseInt(params.get('end')) || 24; 
 
         if (linkBase) {
-          // Khởi tạo slider
+
           var $imageSlider = $('#image-slider').slick({
             dots: true,
             arrows: false,
@@ -60,7 +60,7 @@
             pauseOnHover: true,
           });
 
-          // Tạo danh sách ảnh từ start đến end
+
           for (var i = start; i <= end; i++) {
             var imageUrl = linkBase + i + '.jpg';
             console.log(imageUrl);
