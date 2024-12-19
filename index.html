@@ -7,7 +7,6 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
     />
-
     <link
       rel="stylesheet"
       type="text/css"
@@ -17,23 +16,14 @@
       * {
         box-sizing: border-box;
       }
-      /* Add your custom CSS here */
       body {
         background-color: #f8f8f8;
         font-family: Arial, sans-serif;
         font-size: 16px;
-        margin: 0px;
+        margin: 0;
       }
       #image-slider {
         max-width: 100vw;
-      }
-      .slick-slide {
-        position: relative;
-      }
-      form {
-        position: absolute;
-        top: 0px;
-        left: 0px;
       }
       #image-slider img {
         display: block;
@@ -41,43 +31,10 @@
         max-width: 100%;
         max-height: 100vh;
       }
-
-      #add-image {
-        display: block;
-      }
-
-      #image-url {
-        box-sizing: border-box;
-      }
-
-      .delete {
-        display: block;
-        padding: 5px;
-        background-color: #f44336;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        z-index: 2;
-      }
-
-      .delete:hover {
-        background-color: #d32f2f;
-      }
-      .hide {
-        opacity: 0;
-      }
     </style>
   </head>
   <body>
-    <div id="image-slider" class="hide"></div>
-    <form>
-      <input type="text" id="image-url" name="image-url" placeholder="Enter image URL here" />
-      <button type="button" id="add-image">Add Image</button>
-    </form>
+    <div id="image-slider"></div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script
       type="text/javascript"
@@ -85,43 +42,34 @@
     ></script>
     <script type="text/javascript">
       $(document).ready(function () {
-        // Initialize image slider
-        var $imageSlider = $('#image-slider').slick({
-          dots: true,
-          arrows: false,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          autoplay: true,
-          autoplaySpeed: 10000,
-          pauseOnHover: true,
-        });
+        // Lấy các tham số từ URL
+        const params = new URLSearchParams(window.location.search);
+        const linkBase = params.get('link');
+        const start = parseInt(params.get('start')) || 18; // Mặc định là 18 nếu không có start
+        const end = parseInt(params.get('end')) || 24; // Mặc định là 24 nếu không có end
 
-        $('#add-image').click(function () {
-          $('.hide').removeClass('hide');
-          var valueInput = $('#image-url').val();
-          for (var i = 18; i <= 23; i++) {
-            var imageUrl = valueInput + i + '.jpg';
+        if (linkBase) {
+          // Khởi tạo slider
+          var $imageSlider = $('#image-slider').slick({
+            dots: true,
+            arrows: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 10000,
+            pauseOnHover: true,
+          });
+
+          // Tạo danh sách ảnh từ start đến end
+          for (var i = start; i <= end; i++) {
+            var imageUrl = linkBase + i + '.jpg';
             console.log(imageUrl);
-            var $slide = $(
-              '<div><img src="' + imageUrl + '"/><button class="delete">Delete</button></div>'
-            );
-            $slide.find('.delete').click(function () {
-              $imageSlider.slick('slickRemove', $slide.index());
-            });
+            var $slide = $('<div><img src="' + imageUrl + '"/></div>');
             $imageSlider.slick('slickAdd', $slide);
           }
-          $('#image-url').val('');
-        });
-        console.log($imageSlider);
-        // Pause slide show when hovering
-        $imageSlider.on('mouseenter', function () {
-          $imageSlider.slick('slickPause');
-        });
-
-        // Resume slide show when mouse leaves
-        $imageSlider.on('mouseleave', function () {
-          $imageSlider.slick('slickPlay');
-        });
+        } else {
+          console.error('Không tìm thấy tham số "link" trong URL');
+        }
       });
     </script>
   </body>
